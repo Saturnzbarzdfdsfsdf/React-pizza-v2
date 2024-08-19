@@ -1,21 +1,30 @@
 import React from "react";
 
-import { Header, Categories, Sort, PizzaBlock } from './components/index';
+import {
+	Header,
+	Categories,
+	Sort,
+	PizzaBlock,
+	LoadingBlock,
+	PizzaLoadingBlock,
+} from './components/index'
 
 // import pizzas from './assets/pizzas.json'
 
 import './scss/app.scss';
 
 function App() {
-	// https://c6c5967d399af698.mokky.dev/pizzas
+
 
 	const [pizzas, setPizzas] = React.useState([])
+	const [isLoading, setIsLoading] = React.useState(true)
 
 	React.useEffect(() => {
 		fetch('https://c6c5967d399af698.mokky.dev/pizzas').then((response) => {
 			return response.json();
-		}).then((arr) => {
-			setPizzas(arr);
+		}).then((array) => {
+			setPizzas(array);
+			setIsLoading(false)
 		});
 	},[])
 
@@ -31,9 +40,9 @@ function App() {
 						</div>
 						<h2 className='content__title'>Все пиццы</h2>
 						<div className='content__items'>
-							{pizzas.map(pizza => (
-								<PizzaBlock key={pizza.id} {...pizza} />
-							))}
+							{isLoading
+								? [...new Array(6)].map((_, index) => <PizzaLoadingBlock  key={index}/>)
+								: pizzas.map(pizza => <PizzaBlock key={pizza.id} {...pizza} />)}
 						</div>
 					</div>
 				</div>
