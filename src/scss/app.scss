@@ -156,6 +156,7 @@ body {
     margin-top: 30px;
 
     @media (max-width: 768px) {
+      display: inline-block;
       flex-direction: column;
       position: relative;
     }
