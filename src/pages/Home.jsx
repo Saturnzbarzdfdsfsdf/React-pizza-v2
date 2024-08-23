@@ -17,6 +17,7 @@ function Home() {
 	// redux
 	const dispatch = useDispatch()
 	const categoryIndex = useSelector(state => state.filter.categoryIndex)
+	const sortType = useSelector(state => state.filter.sort)
 
 	const [pizzas, setPizzas] = React.useState([])
 
@@ -25,13 +26,7 @@ function Home() {
 
 	const [isLoading, setIsLoading] = React.useState(true)
 
-	// const [categoryIndex, setCategoryIndex] = React.useState(0)
-	const [sortType, setSortType] = React.useState({
-		name: 'популярности',
-		sortProperty: 'rating',
-	})
-
-	const onChangeCategory = (index) => {
+	const onChangeCategory = index => {
 		dispatch(setCategoryIndex(index))
 	}
 
@@ -51,7 +46,7 @@ function Home() {
 				setIsLoading(false)
 			})
 		window.scrollTo(0, 0)
-	}, [category, sortBy, searchValue, dispatch])
+	}, [category, sortBy, searchValue])
 
 	return (
 		<>
@@ -60,7 +55,7 @@ function Home() {
 					categoryIndex={categoryIndex}
 					onChangeCategory={onChangeCategory}
 				/>
-				<Sort sortType={sortType} onChangeSort={index => setSortType(index)} />
+				<Sort />
 			</div>
 			<h2 className='content__title'>Все пиццы</h2>
 			<div className='content__items'>
