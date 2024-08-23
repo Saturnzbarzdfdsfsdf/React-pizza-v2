@@ -1,4 +1,10 @@
 import React from 'react'
+// redux
+import { useSelector, useDispatch } from 'react-redux'
+import { setCategoryIndex } from '../redux/slices/filterSlice'
+
+// Контекст
+import { SearchContext } from '../App'
 
 import {
 	Categories,
@@ -7,21 +13,30 @@ import {
 	PizzaLoadingBlock,
 } from '../components/index'
 
-function Home({ searchValue }) {
+function Home() {
+	// redux
+	const dispatch = useDispatch()
+	const categoryIndex = useSelector(state => state.filter.categoryIndex)
+
 	const [pizzas, setPizzas] = React.useState([])
+
+	// Контекст
+	const { searchValue } = React.useContext(SearchContext)
 
 	const [isLoading, setIsLoading] = React.useState(true)
 
-	// Контекст
-	const [categoryIndex, setCategoryIndex] = React.useState(0)
+	// const [categoryIndex, setCategoryIndex] = React.useState(0)
 	const [sortType, setSortType] = React.useState({
 		name: 'популярности',
 		sortProperty: 'rating',
 	})
 
+	const onChangeCategory = (index) => {
+		dispatch(setCategoryIndex(index))
+	}
+
 	const category = `${categoryIndex > 0 ? `category=${categoryIndex}` : ''}`
 	const sortBy = `${sortType.sortProperty}&title=*${searchValue}`
-
 
 	React.useEffect(() => {
 		setIsLoading(true)
@@ -36,14 +51,14 @@ function Home({ searchValue }) {
 				setIsLoading(false)
 			})
 		window.scrollTo(0, 0)
-	}, [category, sortBy, searchValue])
+	}, [category, sortBy, searchValue, dispatch])
 
 	return (
 		<>
 			<div className='content__top'>
 				<Categories
 					categoryIndex={categoryIndex}
-					onChangeCategory={index => setCategoryIndex(index)}
+					onChangeCategory={onChangeCategory}
 				/>
 				<Sort sortType={sortType} onChangeSort={index => setSortType(index)} />
 			</div>
@@ -53,9 +68,7 @@ function Home({ searchValue }) {
 					? [...new Array(6)].map((_, index) => (
 							<PizzaLoadingBlock key={index} />
 					  ))
-					: pizzas.map(pizza => (
-							<PizzaBlock key={pizza.id} {...pizza} />
-					  ))}
+					: pizzas.map(pizza => <PizzaBlock key={pizza.id} {...pizza} />)}
 			</div>
 		</>
 	)
