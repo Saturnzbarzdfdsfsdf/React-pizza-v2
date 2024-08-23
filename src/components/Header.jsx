@@ -2,9 +2,10 @@ import React from 'react'
 
 import logoSvg from '../assets/img/pizza-logo.svg';
 import { Link } from 'react-router-dom';
+import {Search} from './index';
 
 function Header() {
-  return (
+	return (
 		<div className='header'>
 			<div className='container'>
 				<Link to='./'>
@@ -16,6 +17,7 @@ function Header() {
 						</div>
 					</div>
 				</Link>
+				<Search />
 				<div className='header__cart'>
 					<Link to='/Cart' className='button button--cart'>
 						<span>520 ₽</span>

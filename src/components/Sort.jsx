@@ -1,6 +1,6 @@
 import React from 'react'
 
-function Sort({ value, onChangeSort }) {
+function Sort({ sortType, onChangeSort }) {
 	const [open, setOpen] = React.useState(false)
 
 	// const [selected, setSelected] = React.useState(0)
@@ -34,7 +34,7 @@ function Sort({ value, onChangeSort }) {
 					/>
 				</svg>
 				<b>Сортировка по:</b>
-				<span onClick={() => setOpen(!open)}>{value.name}</span>
+				<span onClick={() => setOpen(!open)}>{sortType.name}</span>
 			</div>
 			{open && (
 				<div className='sort__popup'>
@@ -44,7 +44,7 @@ function Sort({ value, onChangeSort }) {
 								key={index}
 								onClick={() => onClickListItem(obj)}
 								className={
-									value.sortProperty === obj.sortProperty ? 'active' : ''
+									sortType.sortProperty === obj.sortProperty ? 'active' : ''
 								}
 							>
 								{obj.name}
