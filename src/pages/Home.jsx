@@ -1,4 +1,7 @@
 import React from 'react'
+
+import axios from 'axios'
+
 // redux
 import { useSelector, useDispatch } from 'react-redux'
 import { setCategoryIndex } from '../redux/slices/filterSlice'
@@ -32,19 +35,18 @@ function Home() {
 
 	const category = `${categoryIndex > 0 ? `category=${categoryIndex}` : ''}`
 	const sortBy = `${sortType.sortProperty}&title=*${searchValue}`
-
+	
 	React.useEffect(() => {
 		setIsLoading(true)
-		fetch(
+
+		axios.get(
 			`https://c6c5967d399af698.mokky.dev/pizzas?${category}&sortBy=-${sortBy}`
 		)
-			.then(response => {
-				return response.json()
-			})
-			.then(array => {
-				setPizzas(array)
-				setIsLoading(false)
-			})
+		.then ((response) => {
+			setPizzas(response.data)
+
+			setIsLoading(false)
+		})
 		window.scrollTo(0, 0)
 	}, [category, sortBy, searchValue])
 
