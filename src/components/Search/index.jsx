@@ -7,37 +7,36 @@ import {SearchContext} from '../../App'
 import styles from './Search.module.scss'
 
 const Search = () => {
-	const {searchValue ,setSearchValue } = React.useContext(SearchContext)
-	// const [value, setValue] = React.useState('')
+	const {setSearchValue } = React.useContext(SearchContext)
+	const [value, setValue] = React.useState('')
 
 	const inputRef = React.useRef()
 
-	
-	// const onClickClear = () => {
-	// 	setSearchValue('')
-	// 	setValue('')
-	// 	inputRef.current.focus()
-	// }
-	
-	// const updateSearchValue = React.useCallback(
-	// 	debounce(str => {
-	// 		setSearchValue(str)
-	// 	}, 1000),
-	// 	[]
-	// )
+	const onClickClear = () => {
+		setSearchValue('')
+		setValue('')
+		inputRef.current.focus()
+	}
 
-	// const onChangeInput = (event) => {
-	// 	setValue(event.target.value)
-	// 	updateSearchValue()
-	// }
+	const updateSearchValue = React.useCallback(
+		debounce(str => {
+			setSearchValue(str)
+		}, 1000),
+		[]
+	)
+
+	const onChangeInput = (event) => {
+		setValue(event.target.value)
+		updateSearchValue(event.target.value)
+	}
 
 	return (
 		<div className={styles.root}>
 			<input
-				value={searchValue}
+				value={value}
 				ref={inputRef}
 				className={styles.input}
-				onChange={event => setSearchValue(event.target.value)}
+				onChange={onChangeInput}
 				placeholder='Поиск пиццы...'
 			/>
 			<svg
@@ -63,9 +62,9 @@ const Search = () => {
 					></path>{' '}
 				</g>
 			</svg>
-			{searchValue && (
+			{value && (
 				<svg
-					onClick={() => setSearchValue('')}
+					onClick={onClickClear}
 					className={styles.close}
 					viewBox='0 0 24 24'
 					fill='none'
