@@ -3,25 +3,29 @@ import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { setSortType } from '../redux/slices/filterSlice'
 
+import { useClickOutside } from './useClickOutside'
+
+export const sortList = [
+	{ name: 'популярности', sortProperty: 'rating' },
+	{ name: 'цене', sortProperty: 'price' },
+	{ name: 'алфавиту', sortProperty: 'title' },
+]
+
 function Sort() {
 	const [open, setOpen] = React.useState(false)
 	// redux
 	const dispatch = useDispatch()
 	const sortType = useSelector(state => state.filter.sort)
+	const sortRef = React.useRef(null);
+	useClickOutside(sortRef, () => setOpen(false) )
 
 	const onChangeSort = obj => {
 		dispatch(setSortType(obj))
 		setOpen(false)
 	}
 
-	const list = [
-		{ name: 'популярности', sortProperty: 'rating' },
-		{ name: 'цене', sortProperty: 'price' },
-		{ name: 'алфавиту', sortProperty: 'title' },
-	]
-
 	return (
-		<div className='sort'>
+		<div ref={sortRef} className='sort'>
 			<div className='sort__label'>
 				<svg
 					width='10'
@@ -41,7 +45,7 @@ function Sort() {
 			{open && (
 				<div className='sort__popup'>
 					<ul>
-						{list.map((obj, index) => (
+						{sortList.map((obj, index) => (
 							<li
 								key={index}
 								onClick={() => onChangeSort(obj)}

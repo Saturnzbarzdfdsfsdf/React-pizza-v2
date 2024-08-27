@@ -7,31 +7,32 @@ import {SearchContext} from '../../App'
 import styles from './Search.module.scss'
 
 const Search = () => {
+
 	const {setSearchValue } = React.useContext(SearchContext)
 	const [value, setValue] = React.useState('')
 
 	const inputRef = React.useRef()
-
+	
 	const onClickClear = () => {
 		setSearchValue('')
 		setValue('')
 		inputRef.current.focus()
 	}
-
+	
 	const updateSearchValue = React.useCallback(
 		debounce(str => {
 			setSearchValue(str)
 		}, 1000),
 		[]
 	)
-
+	
 	const onChangeInput = (event) => {
 		setValue(event.target.value)
 		updateSearchValue(event.target.value)
 	}
-
+	
 	return (
-		<div className={styles.root}>
+		<form className={styles.root}>
 			<input
 				value={value}
 				ref={inputRef}
@@ -52,7 +53,7 @@ const Search = () => {
 					strokeLinejoin='round'
 				></g>
 				<g id='SVGRepo_iconCarrier'>
-					{' '}
+
 					<path
 						d='M16.6725 16.6412L21 21M19 11C19 15.4183 15.4183 19 11 19C6.58172 19 3 15.4183 3 11C3 6.58172 6.58172 3 11 3C15.4183 3 19 6.58172 19 11Z'
 						stroke='#000000'
@@ -90,7 +91,7 @@ const Search = () => {
 					</g>
 				</svg>
 			)}
-		</div>
+		</form>
 	)
 }
 

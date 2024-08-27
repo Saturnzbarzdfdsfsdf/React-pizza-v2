@@ -24,31 +24,37 @@ function Home() {
 
 	const [pizzas, setPizzas] = React.useState([])
 
+	const onChangeCategory = index => {
+		dispatch(setCategoryIndex(index))
+	}
+
 	// Контекст
 	const { searchValue } = React.useContext(SearchContext)
 
 	const [isLoading, setIsLoading] = React.useState(true)
 
-	const onChangeCategory = index => {
-		dispatch(setCategoryIndex(index))
-	}
-
+	// for get
 	const category = `${categoryIndex > 0 ? `category=${categoryIndex}` : ''}`
 	const sortBy = `${sortType.sortProperty}&title=*${searchValue}`
-	
-	React.useEffect(() => {
+
+	const fetchPizzas = () => {
 		setIsLoading(true)
 
-		axios.get(
-			`https://c6c5967d399af698.mokky.dev/pizzas?${category}&sortBy=-${sortBy}`
-		)
-		.then ((response) => {
-			setPizzas(response.data)
+		axios
+			.get(
+				`https://c6c5967d399af698.mokky.dev/pizzas?${category}&sortBy=-${sortBy}`
+			)
+			.then(response => {
+				setPizzas(response.data)
 
-			setIsLoading(false)
-		})
-		window.scrollTo(0, 0)
-	}, [category, sortBy, searchValue])
+				setIsLoading(false)
+			})
+		}
+		
+		React.useEffect(() => {
+			fetchPizzas()
+			window.scrollTo(0, 0)
+	}, [categoryIndex, sortType.sortProperty, searchValue])
 
 	return (
 		<>
