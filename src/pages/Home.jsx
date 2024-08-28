@@ -2,10 +2,10 @@ import React from 'react'
 
 // redux
 import { useSelector, useDispatch } from 'react-redux'
+
 import { setCategoryIndex } from '../redux/slices/filterSlice'
 import { fetchPizza } from '../redux/slices/pizzaSlice'
-// Контекст
-import { SearchContext } from '../App'
+
 import {
 	Categories,
 	Sort,
@@ -19,17 +19,13 @@ function Home() {
 	// redux
 	const dispatch = useDispatch()
 	const { items, status } = useSelector(state => state.pizza)
+	const { searchValue } = useSelector(state => state.filter)
 	const categoryIndex = useSelector(state => state.filter.categoryIndex)
 	const sortType = useSelector(state => state.filter.sort)
 
 	const onChangeCategory = index => {
 		dispatch(setCategoryIndex(index))
 	}
-
-	// Контекст
-	const { searchValue } = React.useContext(SearchContext)
-
-	// for get
 
 	const getPizzas = async () => {
 		const category = `${categoryIndex > 0 ? `category=${categoryIndex}` : ''}`
@@ -43,7 +39,7 @@ function Home() {
 		)
 		window.scrollTo(0, 0)
 	}
-
+	
 	React.useEffect(() => {
 		getPizzas()
 	}, [categoryIndex, sortType.sortProperty, searchValue])
