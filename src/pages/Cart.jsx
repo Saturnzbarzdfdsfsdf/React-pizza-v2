@@ -10,10 +10,12 @@ function Cart() {
 
 	const dispatch = useDispatch()
 	const { totalPrice, items } = useSelector(state => state.cart)
-	console.log(totalPrice)
+
 	//сделать в редаксе самому
 	const totalCount = items.reduce((sum, item) => sum + item.count, 0)
-
+	const totalPrices = items.reduce((currentSum, obj)  => {
+				return obj.price * obj.count + currentSum
+			}, 0)
   const onClickClear = () => {
 		if (window.confirm('Вы хотите очистить корзину ?:)')) {
 			dispatch(clearItem())
@@ -108,10 +110,10 @@ function Cart() {
 				<div className='cart__bottom'>
 					<div className='cart__bottom-details'>
 						<span>
-							Всего пицц: <b> {totalCount} шт.</b>{' '}
+							Всего пицц: <b> {totalCount} шт.</b>
 						</span>
 						<span>
-							Сумма заказа: <b>{totalPrice } ₽</b>{' '}
+							Сумма заказа: <b>{totalPrices} ₽</b>
 						</span>
 					</div>
 					<div className='cart__bottom-buttons'>

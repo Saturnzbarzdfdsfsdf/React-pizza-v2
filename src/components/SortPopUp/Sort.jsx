@@ -1,9 +1,9 @@
 import React from 'react'
 // redux
 import { useSelector, useDispatch } from 'react-redux'
-import { setSortType } from '../redux/slices/filterSlice'
+import { setSortType } from '../../redux/slices/filterSlice'
 
-import { useClickOutside } from './useClickOutside'
+import { useClickOutside } from '../Hooks/useClickOutside'
 
 export const sortList = [
 	{ name: 'популярности', sortProperty: 'rating' },

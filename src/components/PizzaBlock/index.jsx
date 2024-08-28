@@ -5,7 +5,7 @@ import { addItem } from '../../redux/slices/cartSlice'
 const typeNames = ['тонкое', 'традиционное']
 // const sizeNames = [20,30,40]
 
-function PizzaBlock({ imageUrl, title, price, sizes, types, id }) {
+function PizzaBlock({ imageUrl, title, price, sizes, types, id, }) {
 	const dispatch = useDispatch()
 	// получить одну пиццу
 	const cartItem = useSelector(state =>
@@ -28,10 +28,8 @@ function PizzaBlock({ imageUrl, title, price, sizes, types, id }) {
 			// size: sizeNames[activeSize],
 		}
 		dispatch(addItem(item))
-
 	}
 
-	// console.log(totalPrice)
 	return (
 		<div className='pizza-block'>
 			<img className='pizza-block__image' src={imageUrl} alt='Pizza' />

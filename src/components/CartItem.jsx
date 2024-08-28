@@ -19,7 +19,7 @@ const CartItem = ({ id, title, price, imageUrl, type, count, size }) => {
 			dispatch(removeItem(id))
 		}
 	}
-	console.log(size)
+	
 	return (
 		<div className='cart__item'>
 			<div className='cart__item-img'>

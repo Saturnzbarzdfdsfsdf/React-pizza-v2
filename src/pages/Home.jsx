@@ -1,28 +1,26 @@
 import React from 'react'
 
-import axios from 'axios'
-
 // redux
 import { useSelector, useDispatch } from 'react-redux'
 import { setCategoryIndex } from '../redux/slices/filterSlice'
-
+import { fetchPizza } from '../redux/slices/pizzaSlice'
 // Контекст
 import { SearchContext } from '../App'
-
 import {
 	Categories,
 	Sort,
 	PizzaBlock,
 	PizzaLoadingBlock,
+	ErrorBlock,
 } from '../components/index'
+
 
 function Home() {
 	// redux
 	const dispatch = useDispatch()
+	const { items, status } = useSelector(state => state.pizza)
 	const categoryIndex = useSelector(state => state.filter.categoryIndex)
 	const sortType = useSelector(state => state.filter.sort)
-
-	const [pizzas, setPizzas] = React.useState([])
 
 	const onChangeCategory = index => {
 		dispatch(setCategoryIndex(index))
@@ -31,30 +29,29 @@ function Home() {
 	// Контекст
 	const { searchValue } = React.useContext(SearchContext)
 
-	const [isLoading, setIsLoading] = React.useState(true)
-
 	// for get
-	const category = `${categoryIndex > 0 ? `category=${categoryIndex}` : ''}`
-	const sortBy = `${sortType.sortProperty}&title=*${searchValue}`
 
-	const fetchPizzas = () => {
-		setIsLoading(true)
+	const getPizzas = async () => {
+		const category = `${categoryIndex > 0 ? `category=${categoryIndex}` : ''}`
+		const sortBy = `${sortType.sortProperty}&title=*${searchValue}`
 
-		axios
-			.get(
-				`https://c6c5967d399af698.mokky.dev/pizzas?${category}&sortBy=-${sortBy}`
-			)
-			.then(response => {
-				setPizzas(response.data)
-
-				setIsLoading(false)
+		dispatch(
+			fetchPizza({
+				category,
+				sortBy,
 			})
-		}
-		
-		React.useEffect(() => {
-			fetchPizzas()
-			window.scrollTo(0, 0)
+		)
+		window.scrollTo(0, 0)
+	}
+
+	React.useEffect(() => {
+		getPizzas()
 	}, [categoryIndex, sortType.sortProperty, searchValue])
+
+	const skeletons = [...new Array(6)].map((_, index) => (
+		<PizzaLoadingBlock key={index} />
+	))
+	const render = items.map(pizza => <PizzaBlock key={pizza.id} {...pizza} />)
 
 	return (
 		<>
@@ -66,15 +63,42 @@ function Home() {
 				<Sort />
 			</div>
 			<h2 className='content__title'>Все пиццы</h2>
-			<div className='content__items'>
-				{isLoading
-					? [...new Array(6)].map((_, index) => (
-							<PizzaLoadingBlock key={index} />
-					  ))
-					: pizzas.map(pizza => <PizzaBlock key={pizza.id} {...pizza} />)}
-			</div>
+			{status === 'error' ? (
+				<>
+				<ErrorBlock/>
+				</>
+			) : (
+				<div className='content__items'>
+					{status === 'loading' ? skeletons : render}
+				</div>
+			)}
 		</>
 	)
 }
 
 export default Home
+
+// const fetchPizzas = async () => {
+// 	setIsLoading(true)
+// 	const category = `${categoryIndex > 0 ? `category=${categoryIndex}` : ''}`
+// 	const sortBy = `${sortType.sortProperty}&title=*${searchValue}`
+
+// 	try {
+// 		const { data } = await axios.get(
+// 			`https://c6c5967d399af698.mokky.dev/pizzas?${category}&sortBy=-${sortBy}`
+// 		)
+// 		// console.log('Received data:', data) // Добавьте это для проверки
+// 		dispatch(setItems(data))
+// 	} catch (error) {
+// 		console.log('ERROR', error)
+// 		alert('Ошибка при получении пицц')
+// 	} finally {
+// 		setIsLoading(false)
+// 	}
+
+// 	window.scrollTo(0, 0)
+// }
+
+// React.useEffect(() => {
+// 	fetchPizzas()
+// }, [categoryIndex, sortType.sortProperty, searchValue])
