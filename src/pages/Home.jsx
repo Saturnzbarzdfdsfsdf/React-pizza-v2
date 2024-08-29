@@ -47,7 +47,9 @@ function Home() {
 	const skeletons = [...new Array(6)].map((_, index) => (
 		<PizzaLoadingBlock key={index} />
 	))
-	const render = items.map(pizza => <PizzaBlock key={pizza.id} {...pizza} />)
+	const render = items.map(pizza => (
+			<PizzaBlock key={pizza.id} {...pizza} />
+	))
 
 	return (
 		<>

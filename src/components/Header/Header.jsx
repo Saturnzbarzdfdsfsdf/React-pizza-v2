@@ -3,7 +3,7 @@ import React from 'react'
 import {useSelector} from 'react-redux'
 
 import logoSvg from '../../assets/img/pizza-logo.svg';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import {Search} from '../index';
 
 function Header() {
@@ -13,6 +13,9 @@ function Header() {
 	const totalPrices = items.reduce((currentSum, obj) => {
 		return obj.price * obj.count + currentSum
 	}, 0)
+
+	const location = useLocation();
+
 	return (
 		<div className='header'>
 			<div className='container'>

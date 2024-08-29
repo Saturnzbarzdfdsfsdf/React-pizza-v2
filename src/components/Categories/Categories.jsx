@@ -1,6 +1,5 @@
 import React from 'react'
 
-
 function Categories({ categoryIndex, onChangeCategory }) {
 	const categories = [
 		'Все',
